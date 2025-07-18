@@ -12,6 +12,11 @@ data class Vector(
         z.toDouble()
     )
 
+    override fun equals(other: Any?): Boolean {
+        val v = other as? Vector ?: return false
+        return x eq v.x && y eq v.y && z eq v.z
+    }
+
     // Operator for addition
     operator fun plus(other: Vector): Vector {
         return Vector(
@@ -28,6 +33,10 @@ data class Vector(
             y - other.y,
             z - other.z
         )
+    }
+    
+    operator fun unaryMinus(): Vector {
+        return Vector(-x, -y, -z)
     }
 
     // Operator for scalar multiplication

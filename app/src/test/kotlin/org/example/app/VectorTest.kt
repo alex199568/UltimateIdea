@@ -1,6 +1,5 @@
-package org.example.app.org.example.app
+package org.example.app
 
-import org.example.app.Vector
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -116,5 +115,26 @@ class VectorTest {
         val v2 = Vector(-4, 5, -6)
         val result = v1 cross v2
         Assertions.assertEquals(Vector(-3.0, -6.0, -3.0), result) // ((-2)*(-6) - (3)*(5), ..., ...)
+    }
+
+    @Test
+    fun `unaryMinus should negate vector coordinates properly`() {
+        val v = Vector(1.0, 2.0, 3.0)
+        val result = -v
+        Assertions.assertEquals(Vector(-1.0, -2.0, -3.0), result)
+    }
+
+    @Test
+    fun `unaryMinus should negate vector coordinates with positive and negative values`() {
+        val v = Vector(1.0, -2.0, 3.0)
+        val result = -v
+        Assertions.assertEquals(Vector(-1.0, 2.0, -3.0), result)
+    }
+
+    @Test
+    fun `unaryMinus should negate a zero vector correctly`() {
+        val v = Vector(0.0, 0.0, 0.0)
+        val result = -v
+        Assertions.assertEquals(Vector(0.0, 0.0, 0.0), result)
     }
 }
