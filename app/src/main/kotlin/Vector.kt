@@ -17,6 +17,13 @@ data class Vector(
         return x eq v.x && y eq v.y && z eq v.z
     }
 
+    override fun hashCode(): Int {
+        var result = x.hashCode()
+        result = 31 * result + y.hashCode()
+        result = 31 * result + z.hashCode()
+        return result
+    }
+
     // Operator for addition
     operator fun plus(other: Vector): Vector {
         return Vector(
