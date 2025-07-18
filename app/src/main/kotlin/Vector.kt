@@ -54,4 +54,12 @@ data class Vector(
     infix fun dot(other: Vector): Double {
         return x * other.x + y * other.y + z * other.z
     }
+    
+    infix fun cross(other: Vector): Vector {
+        return Vector(
+            y * other.z - z * other.y,
+            z * other.x - x * other.z,
+            x * other.y - y * other.x
+        )
+    }
 }

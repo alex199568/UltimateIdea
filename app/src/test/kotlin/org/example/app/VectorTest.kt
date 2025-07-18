@@ -85,4 +85,36 @@ class VectorTest {
         val result = v1 dot v2
         Assertions.assertEquals(0.0, result) // 0*4 + 0*5 + 0*6 = 0
     }
+
+    @Test
+    fun `cross function should calculate cross product of two non-zero vectors correctly`() {
+        val v1 = Vector(1, 0, 0)
+        val v2 = Vector(0, 1, 0)
+        val result = v1 cross v2
+        Assertions.assertEquals(Vector(0.0, 0.0, 1.0), result) // (1,0,0) x (0,1,0) = (0,0,1)
+    }
+
+    @Test
+    fun `cross function should return zero vector when vectors are parallel`() {
+        val v1 = Vector(1, 1, 1)
+        val v2 = Vector(2, 2, 2)
+        val result = v1 cross v2
+        Assertions.assertEquals(Vector(0.0, 0.0, 0.0), result) // Parallel vectors give (0,0,0)
+    }
+
+    @Test
+    fun `cross function should return zero vector when one vector is a zero vector`() {
+        val v1 = Vector(0, 0, 0)
+        val v2 = Vector(1, 2, 3)
+        val result = v1 cross v2
+        Assertions.assertEquals(Vector(0.0, 0.0, 0.0), result) // Zero vector x (1,2,3) = (0,0,0)
+    }
+
+    @Test
+    fun `cross function should calculate cross product correctly for vectors with positive and negative components`() {
+        val v1 = Vector(1, -2, 3)
+        val v2 = Vector(-4, 5, -6)
+        val result = v1 cross v2
+        Assertions.assertEquals(Vector(-3.0, -6.0, -3.0), result) // ((-2)*(-6) - (3)*(5), ..., ...)
+    }
 }
