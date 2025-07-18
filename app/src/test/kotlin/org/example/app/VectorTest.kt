@@ -53,4 +53,36 @@ class VectorTest {
         }
         Assertions.assertEquals("Division by zero is not allowed", exception.message)
     }
+
+    @Test
+    fun `dot function should calculate dot product correctly for positive vectors`() {
+        val v1 = Vector(1, 2, 3)
+        val v2 = Vector(4, 5, 6)
+        val result = v1 dot v2
+        Assertions.assertEquals(32.0, result) // 1*4 + 2*5 + 3*6 = 32
+    }
+
+    @Test
+    fun `dot function should calculate dot product correctly for vectors with both positive and negative values`() {
+        val v1 = Vector(1, -2, 3)
+        val v2 = Vector(-4, 5, -6)
+        val result = v1 dot v2
+        Assertions.assertEquals(-32.0, result) // 1*(-4) + (-2)*5 + 3*(-6) = -32
+    }
+
+    @Test
+    fun `dot function should calculate dot product correctly for vectors with zero values`() {
+        val v1 = Vector(1, 0, 3)
+        val v2 = Vector(0, 5, 0)
+        val result = v1 dot v2
+        Assertions.assertEquals(0.0, result) // 1*0 + 0*5 + 3*0 = 0
+    }
+
+    @Test
+    fun `dot function should return zero when one vector is a zero vector`() {
+        val v1 = Vector(0, 0, 0)
+        val v2 = Vector(4, 5, 6)
+        val result = v1 dot v2
+        Assertions.assertEquals(0.0, result) // 0*4 + 0*5 + 0*6 = 0
+    }
 }

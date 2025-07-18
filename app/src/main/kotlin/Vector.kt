@@ -50,4 +50,8 @@ data class Vector(
             z / factor
         )
     }
+    
+    infix fun dot(other: Vector): Double {
+        return x * other.x + y * other.y + z * other.z
+    }
 }
