@@ -65,4 +65,35 @@ data class Color(
             b / factor
         )
     }
+
+    companion object {
+        val white = Color(1, 1, 1)
+        val lightGray = Color(0.75, 0.75, 0.75)
+        val gray = Color(0.5, 0.5, 0.5)
+        val darkGray = Color(0.25, 0.25, 0.25)
+        val black = Color(0, 0, 0)
+
+        val red = Color(1, 0, 0)
+        val green = Color(0, 1, 0)
+        val blue = Color(0, 0, 1)
+
+        val yellow = Color(1, 1, 0)
+        val magenta = Color(1, 0, 1)
+        val cyan = Color(0, 1, 1)
+
+        val orange = Color(1, 0.5, 0)
+        val purple = Color(0.5, 0, 0.5)
+        val brown = Color(0.6, 0.3, 0)
+        val pink = Color(1, 0.75, 0.8)
+
+        val lime = Color(0.75, 1, 0)
+        val teal = Color(0, 0.5, 0.5)
+        val indigo = Color(0.29, 0, 0.51)
+        val maroon = Color(0.5, 0, 0)
+        val navy = Color(0, 0, 0.5)
+        val olive = Color(0.5, 0.5, 0)
+        val turquoise = Color(0.25, 0.88, 0.82)
+        val violet = Color(0.93, 0.51, 0.93)
+        val gold = Color(1, 0.84, 0)
+    }
 }
