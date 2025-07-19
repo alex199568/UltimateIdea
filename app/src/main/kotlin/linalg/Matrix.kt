@@ -18,6 +18,8 @@ open class Matrix(
             }
         }
     }
+    
+    
 
     override fun equals(other: Any?): Boolean {
         val m = other as? Matrix ?: return false
@@ -35,6 +37,30 @@ open class Matrix(
         result = 31 * result + columns
         result = 31 * result + items.contentHashCode()
         return result
+    }
+
+    override fun toString(): String {
+        val sb = StringBuilder()
+        sb.append("Matrix($rows×$columns):\n")
+
+        // Find max width for alignment
+        var maxWidth = 0
+        for (i in 0 until rows) {
+            for (j in 0 until columns) {
+                maxWidth = maxOf(maxWidth, "%.2f".format(this[i, j]).length)
+            }
+        }
+
+        // Build formatted string
+        for (i in 0 until rows) {
+            sb.append("  [")
+            for (j in 0 until columns) {
+                if (j > 0) sb.append(", ")
+                sb.append("%.2f".format(this[i, j]).padStart(maxWidth))
+            }
+            sb.append("]\n")
+        }
+        return sb.toString()
     }
 
     private val items = Array(rows * columns) { elements.getOrNull(it)?.toDouble() ?: 0.0 }
@@ -61,7 +87,7 @@ open class Matrix(
         items[index(i, j)] = n.toDouble()
     }
 
-    operator fun times(other: Matrix): Matrix {
+    open operator fun times(other: Matrix): Matrix {
         require(columns == other.rows) {
             "Matrix dimensions are incompatible for multiplication: " +
                     "$rows×$columns and ${other.rows}×${other.columns}"

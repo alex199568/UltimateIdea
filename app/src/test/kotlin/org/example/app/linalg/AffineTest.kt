@@ -5,8 +5,129 @@ import org.example.app.linalg.Affine.Companion.rotateY
 import org.example.app.linalg.Affine.Companion.rotateZ
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class AffineTest {
+
+    @Test
+    fun `affine times affine produces correct transformation`() {
+        val affine1 = Affine.translate(1, 2, 3)
+        val affine2 = Affine.scale(2, 3, 4)
+        val result = affine1 * affine2
+
+        val expected = Affine(
+            2.0, 0.0, 0.0, 1.0,
+            0.0, 3.0, 0.0, 2.0,
+            0.0, 0.0, 4.0, 3.0
+        )
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `translation times scaling produces correct affine`() {
+        val translation = Affine.translate(1, 1, 1)
+        val scaling = Affine.scale(2, 2, 2)
+        val result = translation * scaling
+
+        val expected = Affine(
+            2.0, 0.0, 0.0, 1.0,
+            0.0, 2.0, 0.0, 1.0,
+            0.0, 0.0, 2.0, 1.0
+        )
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `affine times itself produces correct affine`() {
+        val affine = Affine.translate(2, 3, 4)
+        val result = affine * affine
+
+        val expected = Affine(
+            1.0, 0.0, 0.0, 4.0,
+            0.0, 1.0, 0.0, 6.0,
+            0.0, 0.0, 1.0, 8.0
+        )
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `affine times compatible matrix produces valid result`() {
+        val affine = Affine.scale(2, 2, 2)
+        val matrix = Matrix(
+            3, 3,
+            2, 1, 0,
+            0, 2, 0,
+            0, 0, 1
+        )
+        val result = affine * matrix
+
+        val expected = Matrix(
+            3, 3,
+            4.0, 2.0, 0.0,
+            0.0, 4.0, 0.0,
+            0.0, 0.0, 2.0
+        )
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `affine times incompatible matrix throws exception`() {
+        val affine = Affine.translate(1, 2, 3)
+        val incompatibleMatrix = Matrix(2, 2, 1, 2, 3, 4)
+
+        assertFailsWith<IllegalArgumentException> {
+            affine * incompatibleMatrix
+        }
+    }
+
+    @Test
+    fun `inverse of identity affine matrix is identity`() {
+        val identity = Affine(
+            1.0, 0.0, 0.0, 0.0,
+            0.0, 1.0, 0.0, 0.0,
+            0.0, 0.0, 1.0, 0.0
+        )
+
+        assertEquals(identity, identity.inverse)
+    }
+
+    @Test
+    fun `affine times inverse produces identity`() {
+        val affine = Affine(
+            2.0, 0.0, 0.0, 1.0,
+            0.0, 3.0, 0.0, 2.0,
+            0.0, 0.0, 4.0, 3.0
+        )
+
+        val result = affine * affine.inverse
+        val identity = Affine(
+            1.0, 0.0, 0.0, 0.0,
+            0.0, 1.0, 0.0, 0.0,
+            0.0, 0.0, 1.0, 0.0
+        )
+
+        assertEquals(identity, result)
+    }
+
+    @Test
+    fun `inverse of translation matrix works correctly`() {
+        val translation = Affine.translate(1, 2, 3)
+        val expected = Affine.translate(-1, -2, -3)
+
+        assertEquals(expected, translation.inverse)
+    }
+
+    @Test
+    fun `inverse of scaling matrix works correctly`() {
+        val scaling = Affine.scale(2, 3, 4)
+        val expected = Affine.scale(0.5, 1.0 / 3.0, 0.25)
+
+        assertEquals(expected, scaling.inverse)
+    }
 
     @Test
     fun testAffineTimesPoint() {
