@@ -137,4 +137,25 @@ class VectorTest {
         val result = -v
         Assertions.assertEquals(Vector(0.0, 0.0, 0.0), result)
     }
+
+    @Test
+    fun `hashCode should be equal for identical vectors`() {
+        val v1 = Vector(1.0, 2.0, 3.0)
+        val v2 = Vector(1.0, 2.0, 3.0)
+        Assertions.assertEquals(v1.hashCode(), v2.hashCode())
+    }
+
+    @Test
+    fun `hashCode should differ for distinct vectors`() {
+        val v1 = Vector(1.0, 2.0, 3.0)
+        val v2 = Vector(4.0, 5.0, 6.0)
+        Assertions.assertNotEquals(v1.hashCode(), v2.hashCode())
+    }
+
+    @Test
+    fun `hashCode should be consistent for the same vector instance`() {
+        val v = Vector(1.0, 2.0, 3.0)
+        val initialHashCode = v.hashCode()
+        Assertions.assertEquals(initialHashCode, v.hashCode())
+    }
 }

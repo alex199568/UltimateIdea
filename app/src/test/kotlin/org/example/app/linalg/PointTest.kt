@@ -2,6 +2,7 @@ package org.example.app.linalg
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
 
 class PointTest {
 
@@ -59,5 +60,27 @@ class PointTest {
         assertEquals(2.0, result.x, "Expected x to be 2.0 after subtraction")
         assertEquals(3.0, result.y, "Expected y to be 3.0 after subtraction")
         assertEquals(4.0, result.z, "Expected z to be 4.0 after subtraction")
+    }
+
+    @Test
+    fun `test hashCode consistency for the same Point instance`() {
+        val point = Point(1.5, 2.5, 3.5)
+        val hash1 = point.hashCode()
+        val hash2 = point.hashCode()
+        assertEquals(hash1, hash2, "Expected hashCode to be consistent for the same Point instance")
+    }
+
+    @Test
+    fun `test hashCode equality for equal Points`() {
+        val point1 = Point(1.5, 2.5, 3.5)
+        val point2 = Point(1.5, 2.5, 3.5)
+        assertEquals(point1.hashCode(), point2.hashCode(), "Expected equal Points to have the same hashCode")
+    }
+
+    @Test
+    fun `test hashCode inequality for different Points`() {
+        val point1 = Point(1.5, 2.5, 3.5)
+        val point2 = Point(4.5, 5.5, 6.5)
+        assertNotEquals(point1.hashCode(), point2.hashCode(), "Expected different Points to have different hashCodes")
     }
 }

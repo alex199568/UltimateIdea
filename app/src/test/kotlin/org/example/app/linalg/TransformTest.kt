@@ -1,5 +1,6 @@
 package org.example.app.linalg
 
+import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -108,5 +109,19 @@ class TransformTest {
         val result = identity * point
 
         assertEquals(point, result)
+    }
+    
+    @Test
+    fun `times point fails when transform is invalid`() {
+        val tr = Transform(
+            1, 2, 3, 4,
+            2, 3, 4, 5,
+            3, 4, 5, 6,
+            0, 0, 0, 0
+        )
+        val p = Point(1, 2, 3)
+        assertThrows<IllegalArgumentException> {
+            tr * p
+        }
     }
 }

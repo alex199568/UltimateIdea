@@ -51,28 +51,7 @@ class Affine(
     override fun times(other: Matrix): Matrix {
         return when (other) {
             is Affine -> {
-                // Affine * Affine multiplication
-                // Treat both as 4x4 matrices with implicit [0,0,0,1] last row
-                val result = Affine()
-
-                // Multiply as if both were 4x4 matrices
-                for (i in 0 until 3) {
-                    for (j in 0 until 4) {
-                        var sum = 0.0
-                        // Standard matrix multiplication for the 3x4 part
-                        for (k in 0 until 3) {
-                            sum += this[i, k] * other[k, j]
-                        }
-                        // Add contribution from implicit [0,0,0,1] row of this matrix
-                        // and implicit [0,0,0,1] column of other matrix
-                        if (j == 3) {
-                            sum += this[i, 3] * 1.0  // this[i, 3] * other[3, 3] where other[3,3] = 1
-                        }
-                        result[i, j] = sum
-                    }
-                }
-
-                result
+                times(other)
             }
 
             else -> {

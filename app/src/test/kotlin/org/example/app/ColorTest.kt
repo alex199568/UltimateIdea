@@ -121,4 +121,26 @@ class ColorTest {
         // Then
         assertEquals(0xFF00FF7F.toInt(), result) // Red clamped to 0, Green clamped to 255, Blue is valid
     }
+
+    @Test
+    fun `test hashCode consistency`() {
+        // Given
+        val color1 = Color(0.5, 0.5, 0.5)
+        val color2 = Color(0.5, 0.5, 0.5)
+
+        // Then
+        assertEquals(color1.hashCode(), color2.hashCode())
+    }
+
+    @Test
+    fun `test hashCode differentiation`() {
+        // Given
+        val color1 = Color(0.5, 0.5, 0.5)
+        val color2 = Color(0.6, 0.6, 0.6)
+
+        // Then
+        assert(color1.hashCode() != color2.hashCode()) {
+            "Expected different hash codes for different colors"
+        }
+    }
 }

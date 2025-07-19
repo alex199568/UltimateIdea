@@ -8,6 +8,15 @@ import kotlin.test.assertTrue
 class MatrixTest {
 
     @Test
+    fun string() {
+        val m = Matrix(
+            rows = 1, columns = 2,
+            1, 2
+        )
+        println(m)
+    }
+
+    @Test
     fun `transposed should return correctly for non-square matrix`() {
         val matrix = Matrix(
             rows = 2,
