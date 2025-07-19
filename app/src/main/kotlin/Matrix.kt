@@ -80,6 +80,18 @@ class Matrix(
         return result
     }
     
+    operator fun times(v: Vector): Vector {
+        require(columns == 4 && rows == 4) {
+            "Matrix must be 4x4 for vector multiplication, got ${rows}x${columns}"
+        }
+
+        return Vector(
+            this[0, 0] * v.x + this[0, 1] * v.y + this[0, 2] * v.z,
+            this[1, 0] * v.x + this[1, 1] * v.y + this[1, 2] * v.z,
+            this[2, 0] * v.x + this[2, 1] * v.y + this[2, 2] * v.z
+        )
+    }
+
     val det: Double
         get() {
             require(rows == columns) { "Matrix must be square to calculate determinant" }

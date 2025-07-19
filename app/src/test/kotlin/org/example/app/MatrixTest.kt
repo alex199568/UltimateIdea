@@ -319,6 +319,28 @@ class MatrixTest {
     }
 
     @Test
+    fun `times should correctly multiply a non-trivial 4x4 matrix with a vector`() {
+        val matrix = Matrix(
+            rows = 4,
+            columns = 4,
+            1, 2, 3, 4,
+            5, 6, 7, 8,
+            9, 10, 11, 12,
+            13, 14, 15, 16
+        )
+        val vector = Vector(
+            x = 1,
+            y = 2,
+            z = 3
+        )
+        val result = matrix * vector
+
+        assertEquals(14.0, result.x)
+        assertEquals(38.0, result.y)
+        assertEquals(62.0, result.z)
+    }
+
+    @Test
     fun `times should throw exception for incompatible dimensions`() {
         val matrix1 = Matrix(
             rows = 2,
