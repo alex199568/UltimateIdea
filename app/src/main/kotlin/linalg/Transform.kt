@@ -1,7 +1,6 @@
 package org.example.app.linalg
 
-open class SquareMatrix(
-    size: Int,
+class Transform(
     vararg elements: Number = emptyArray<Number>()
-) : Matrix(size, size, *elements) {
+) : SquareMatrix(4, *elements) {
 }
