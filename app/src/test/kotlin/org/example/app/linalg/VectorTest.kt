@@ -1,4 +1,4 @@
-package org.example.app
+package org.example.app.linalg
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test

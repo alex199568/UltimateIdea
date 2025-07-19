@@ -1,4 +1,4 @@
-package org.example.app
+package org.example.app.linalg
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -347,9 +347,9 @@ class MatrixTest {
         val matrix = Matrix(
             4, 4,
             1.414, -1.414, 0.0, 4.0,   // Combined rotation and translation (row 0)
-            1.414,  1.414, 0.0, -5.0,  // Combined rotation and translation (row 1)
-            0.0,    0.0,   1.5, 6.0,   // Scaling along z-axis (row 2)
-            0.0,    0.0,   0.0, 1.0    // Homogeneous coordinate row
+            1.414, 1.414, 0.0, -5.0,  // Combined rotation and translation (row 1)
+            0.0, 0.0, 1.5, 6.0,   // Scaling along z-axis (row 2)
+            0.0, 0.0, 0.0, 1.0    // Homogeneous coordinate row
         )
 
         // Define a point (x=2, y=3, z=1)
@@ -371,7 +371,8 @@ class MatrixTest {
 
     @Test
     fun `times should correctly multiply a 4x4 matrix with a point, (2)`() {
-        val matrix = Matrix(4, 4,
+        val matrix = Matrix(
+            4, 4,
             1, 0, 0, 2,
             0, 1, 0, 3,
             0, 0, 1, 4,

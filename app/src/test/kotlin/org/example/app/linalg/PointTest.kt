@@ -1,4 +1,4 @@
-package org.example.app
+package org.example.app.linalg
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

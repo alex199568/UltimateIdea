@@ -1,4 +1,6 @@
-package org.example.app
+package org.example.app.linalg
+
+import org.example.app.eq
 
 class Matrix(
     val rows: Int,
@@ -50,15 +52,15 @@ class Matrix(
         require(j in 0 until columns) { "Column index $j out of bounds [0, $columns)" }
         return j + i * columns
     }
-    
+
     operator fun get(i: Int, j: Int): Double {
         return items[index(i, j)]
     }
-    
+
     operator fun set(i: Int, j: Int, n: Number) {
         items[index(i, j)] = n.toDouble()
     }
-    
+
     operator fun times(other: Matrix): Matrix {
         require(columns == other.rows) {
             "Matrix dimensions are incompatible for multiplication: " +
@@ -79,7 +81,7 @@ class Matrix(
 
         return result
     }
-    
+
     operator fun times(v: Vector): Vector {
         require(columns == 4 && rows == 4) {
             "Matrix must be 4x4 for vector multiplication, got ${rows}x${columns}"
@@ -91,7 +93,7 @@ class Matrix(
             this[2, 0] * v.x + this[2, 1] * v.y + this[2, 2] * v.z
         )
     }
-    
+
     operator fun times(p: Point): Point {
         require(columns == 4 && rows == 4) {
             "Matrix must be 4x4 for point multiplication, got ${rows}x${columns}"
@@ -124,7 +126,7 @@ class Matrix(
             }
             return sum
         }
-    
+
     fun submatrix(iExclude: Int, jExclude: Int): Matrix {
         require(iExclude in 0 until rows) { "Row index $iExclude out of bounds [0, $rows)" }
         require(jExclude in 0 until columns) { "Column index $jExclude out of bounds [0, $columns)" }
@@ -146,16 +148,16 @@ class Matrix(
 
         return result
     }
-    
+
     fun minor(i: Int, j: Int): Double {
         return submatrix(i, j).det
     }
-    
+
     fun cofactor(i: Int, j: Int): Double {
         val sign = if ((i + j) % 2 == 0) 1 else -1
         return sign * minor(i, j)
     }
-    
+
     val transposed by lazy {
         val result = Matrix(columns, rows)
         for (i in 0 until rows) {
@@ -165,7 +167,7 @@ class Matrix(
         }
         result
     }
-    
+
     val inverse by lazy {
         require(rows == columns) { "Matrix must be square to calculate inverse" }
         val d = det

@@ -1,4 +1,6 @@
-package org.example.app
+package org.example.app.linalg
+
+import org.example.app.eq
 
 data class Vector(
     val x: Double,
@@ -41,7 +43,7 @@ data class Vector(
             z - other.z
         )
     }
-    
+
     operator fun unaryMinus(): Vector {
         return Vector(-x, -y, -z)
     }
@@ -66,11 +68,11 @@ data class Vector(
             z / factor
         )
     }
-    
+
     infix fun dot(other: Vector): Double {
         return x * other.x + y * other.y + z * other.z
     }
-    
+
     infix fun cross(other: Vector): Vector {
         return Vector(
             y * other.z - z * other.y,

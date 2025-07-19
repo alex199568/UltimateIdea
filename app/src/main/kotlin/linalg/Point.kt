@@ -1,4 +1,6 @@
-package org.example.app
+package org.example.app.linalg
+
+import org.example.app.eq
 
 data class Point(
     val x: Double,
