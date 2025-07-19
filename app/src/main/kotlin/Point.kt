@@ -11,6 +11,18 @@ data class Point(
         z.toDouble()
     )
 
+    override fun equals(other: Any?): Boolean {
+        val p = other as? Point ?: return false
+        return x eq p.x && y eq p.y && z eq p.z
+    }
+
+    override fun hashCode(): Int {
+        var result = x.hashCode()
+        result = 31 * result + y.hashCode()
+        result = 31 * result + z.hashCode()
+        return result
+    }
+
     operator fun plus(other: Vector): Point {
         return Point(
             x + other.x,

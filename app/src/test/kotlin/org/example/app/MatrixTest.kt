@@ -341,6 +341,84 @@ class MatrixTest {
     }
 
     @Test
+    fun `multiply a 4x4 matrix with point using complex transformation`() {
+        // Define a 4x4 matrix with combined transformations:
+        // Scaling (2x, 3y, 1.5z), a translation (+4x, -5y, +6z), and rotation about z-axis (45 degrees).
+        val matrix = Matrix(
+            4, 4,
+            1.414, -1.414, 0.0, 4.0,   // Combined rotation and translation (row 0)
+            1.414,  1.414, 0.0, -5.0,  // Combined rotation and translation (row 1)
+            0.0,    0.0,   1.5, 6.0,   // Scaling along z-axis (row 2)
+            0.0,    0.0,   0.0, 1.0    // Homogeneous coordinate row
+        )
+
+        // Define a point (x=2, y=3, z=1)
+        val point = Point(2.0, 3.0, 1.0)
+
+        // Perform matrix multiplication
+        val result = matrix * point
+
+        // Expected calculation:
+        // x' = (1.414 * 2) + (-1.414 * 3) + (0 * 1) + (4)   = 2.828 - 4.242 + 4 = 2.586
+        // y' = (1.414 * 2) + ( 1.414 * 3) + (0 * 1) + (-5)  = 2.828 + 4.242 - 5 = 2.07
+        // z' = (0 * 2) + (0 * 3) + (1.5 * 1) + (6)         = 0 + 0 + 1.5 + 6 = 7.5
+        // w' = (0 * 2) + (0 * 3) + (0 * 1) + (1)           = 1
+        // Result as Point: (x'/w', y'/w', z'/w') = (2.586, 2.07, 7.5)
+
+        assertEquals(Point(2.586, 2.07, 7.5), result, "The matrix multiplication did not yield the expected point.")
+    }
+
+
+    @Test
+    fun `times should correctly multiply a 4x4 matrix with a point, (2)`() {
+        val matrix = Matrix(4, 4,
+            1, 0, 0, 2,
+            0, 1, 0, 3,
+            0, 0, 1, 4,
+            0, 0, 0, 1
+        ) // Translation matrix
+
+        val point = Point(1, 1, 1)
+
+        val result = matrix * point
+        println(result) // Should output: Point(3.0, 4.0, 5.0)
+
+    }
+
+    @Test
+    fun `times should correctly multiply identity matrix with a point`() {
+        val identity = Matrix(
+            rows = 4,
+            columns = 4,
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        )
+        val point = Point(2, 3, 4)
+        val result = identity * point
+
+        assertEquals(point, result)
+    }
+
+    @Test
+    fun `times should throw exception for invalid matrix dimensions with point`() {
+        val matrix = Matrix(
+            rows = 3,
+            columns = 3,
+            1, 2, 3,
+            4, 5, 6,
+            7, 8, 9
+        )
+        val point = Point(2, 3, 4)
+
+        val exception = assertFailsWith<IllegalArgumentException> {
+            matrix * point
+        }
+    }
+
+
+    @Test
     fun `times should throw exception for incompatible dimensions`() {
         val matrix1 = Matrix(
             rows = 2,
