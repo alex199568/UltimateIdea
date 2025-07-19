@@ -214,5 +214,17 @@ class Affine(
                 0, 0, z, 0
             )
         }
+        
+        fun shearing(
+            xy: Number, xz: Number,
+            yx: Number, yz: Number,
+            zx: Number, zy: Number
+        ): Affine {
+            return Affine(
+                1, xy, xz, 0,
+                yx, 1, yz, 0,
+                zx, zy, 1, 0
+            )
+        }
     }
 }

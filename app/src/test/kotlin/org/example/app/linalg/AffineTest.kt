@@ -582,4 +582,81 @@ class AffineTest {
         assertEquals(0.0, transposed[3, 1], 1e-10)
         assertEquals(0.0, transposed[3, 2], 1e-10)
     }
+
+    @Test
+    fun testShearingXY() {
+        val shearMatrix = Affine.shearing(xy = 1.0, xz = 0.0, yx = 0.0, yz = 0.0, zx = 0.0, zy = 0.0)
+        val point = Point(2.0, 3.0, 4.0)
+        val result = shearMatrix * point
+
+        assertEquals(5.0, result.x)
+        assertEquals(3.0, result.y)
+        assertEquals(4.0, result.z)
+    }
+
+    @Test
+    fun testShearingXZ() {
+        val shearMatrix = Affine.shearing(xy = 0.0, xz = 1.0, yx = 0.0, yz = 0.0, zx = 0.0, zy = 0.0)
+        val point = Point(2.0, 3.0, 4.0)
+        val result = shearMatrix * point
+
+        assertEquals(6.0, result.x)
+        assertEquals(3.0, result.y)
+        assertEquals(4.0, result.z)
+    }
+
+    @Test
+    fun testShearingYX() {
+        val shearMatrix = Affine.shearing(xy = 0.0, xz = 0.0, yx = 1.0, yz = 0.0, zx = 0.0, zy = 0.0)
+        val point = Point(2.0, 3.0, 4.0)
+        val result = shearMatrix * point
+
+        assertEquals(2.0, result.x)
+        assertEquals(5.0, result.y)
+        assertEquals(4.0, result.z)
+    }
+
+    @Test
+    fun testShearingYZ() {
+        val shearMatrix = Affine.shearing(xy = 0.0, xz = 0.0, yx = 0.0, yz = 1.0, zx = 0.0, zy = 0.0)
+        val point = Point(2.0, 3.0, 4.0)
+        val result = shearMatrix * point
+
+        assertEquals(2.0, result.x)
+        assertEquals(7.0, result.y)
+        assertEquals(4.0, result.z)
+    }
+
+    @Test
+    fun testShearingZX() {
+        val shearMatrix = Affine.shearing(xy = 0.0, xz = 0.0, yx = 0.0, yz = 0.0, zx = 1.0, zy = 0.0)
+        val point = Point(2.0, 3.0, 4.0)
+        val result = shearMatrix * point
+
+        assertEquals(2.0, result.x)
+        assertEquals(3.0, result.y)
+        assertEquals(6.0, result.z)
+    }
+
+    @Test
+    fun testShearingZY() {
+        val shearMatrix = Affine.shearing(xy = 0.0, xz = 0.0, yx = 0.0, yz = 0.0, zx = 0.0, zy = 1.0)
+        val point = Point(2.0, 3.0, 4.0)
+        val result = shearMatrix * point
+
+        assertEquals(2.0, result.x)
+        assertEquals(3.0, result.y)
+        assertEquals(7.0, result.z)
+    }
+
+    @Test
+    fun testCombinedShearing() {
+        val shearMatrix = Affine.shearing(xy = 1.0, xz = 1.0, yx = 1.0, yz = 1.0, zx = 1.0, zy = 1.0)
+        val point = Point(2.0, 3.0, 4.0)
+        val result = shearMatrix * point
+
+        assertEquals(9.0, result.x)
+        assertEquals(9.0, result.y)
+        assertEquals(9.0, result.z)
+    }
 }
