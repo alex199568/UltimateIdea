@@ -65,6 +65,20 @@ class MatrixTest {
     }
 
     @Test
+    fun `constructor with no items should initialize empty matrix correctly`() {
+        val matrix = Matrix(rows = 2, columns = 3)
+
+        assertEquals(2, matrix.rows)
+        assertEquals(3, matrix.columns)
+        assertEquals(0.0, matrix[0, 0])
+        assertEquals(0.0, matrix[0, 1])
+        assertEquals(0.0, matrix[0, 2])
+        assertEquals(0.0, matrix[1, 0])
+        assertEquals(0.0, matrix[1, 1])
+        assertEquals(0.0, matrix[1, 2])
+    }
+
+    @Test
     fun `get operator should return correct element`() {
         val matrix = Matrix(
             rows = 2,
@@ -170,5 +184,70 @@ class MatrixTest {
         )
 
         assertEquals(matrix1.hashCode(), matrix2.hashCode())
+    }
+
+    @Test
+    fun `times should correctly multiply two compatible matrices`() {
+        val matrix1 = Matrix(
+            rows = 2,
+            columns = 3,
+            1, 2, 3,
+            4, 5, 6
+        )
+        val matrix2 = Matrix(
+            rows = 3,
+            columns = 2,
+            7, 8,
+            9, 10,
+            11, 12
+        )
+        val result = matrix1 * matrix2
+
+        assertEquals(2, result.rows)
+        assertEquals(2, result.columns)
+        assertEquals(58.0, result[0, 0])
+        assertEquals(64.0, result[0, 1])
+        assertEquals(139.0, result[1, 0])
+        assertEquals(154.0, result[1, 1])
+    }
+
+    @Test
+    fun `times should correctly multiply with identity matrix`() {
+        val matrix = Matrix(
+            rows = 2,
+            columns = 2,
+            3, 5,
+            7, 9
+        )
+        val identity = Matrix(
+            rows = 2,
+            columns = 2,
+            1, 0,
+            0, 1
+        )
+        val result = matrix * identity
+
+        assertEquals(matrix, result)
+    }
+
+    @Test
+    fun `times should throw exception for incompatible dimensions`() {
+        val matrix1 = Matrix(
+            rows = 2,
+            columns = 3,
+            1, 2, 3,
+            4, 5, 6
+        )
+        val matrix2 = Matrix(
+            rows = 2,
+            columns = 2,
+            7, 8,
+            9, 10
+        )
+
+        val exception = assertFailsWith<IllegalArgumentException> {
+            matrix1 * matrix2
+        }
+        assertTrue(exception.message!!.contains("Matrix dimensions are incompatible for multiplication"))
     }
 }

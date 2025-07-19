@@ -3,14 +3,17 @@ package org.example.app
 class Matrix(
     val rows: Int,
     val columns: Int,
-    vararg elements: Number
+    vararg elements: Number = emptyArray<Number>()
 ) {
 
     init {
         require(rows > 0) { "Number of rows must be positive, got $rows" }
         require(columns > 0) { "Number of columns must be positive, got $columns" }
-        require(elements.size == rows * columns) {
-            "Number of elements (${elements.size}) must match matrix size ($rows × $columns)"
+
+        if (elements.isNotEmpty()) {
+            require(elements.size == rows * columns) {
+                "Number of elements (${elements.size}) must match matrix size ($rows × $columns)"
+            }
         }
     }
 
@@ -32,7 +35,7 @@ class Matrix(
         return result
     }
 
-    private val items = Array(rows * columns) { elements[it].toDouble() }
+    private val items = Array(rows * columns) { elements.getOrNull(it)?.toDouble() ?: 0.0 }
 
     /**
      * Calculates the index into the internal array representation based on matrix coordinates.
@@ -54,5 +57,26 @@ class Matrix(
     
     operator fun set(i: Int, j: Int, n: Number) {
         items[index(i, j)] = n.toDouble()
+    }
+    
+    operator fun times(other: Matrix): Matrix {
+        require(columns == other.rows) {
+            "Matrix dimensions are incompatible for multiplication: " +
+                    "$rows×$columns and ${other.rows}×${other.columns}"
+        }
+
+        val result = Matrix(rows, other.columns)
+
+        for (i in 0 until rows) {
+            for (j in 0 until other.columns) {
+                var sum = 0.0
+                for (k in 0 until columns) {
+                    sum += this[i, k] * other[k, j]
+                }
+                result[i, j] = sum
+            }
+        }
+
+        return result
     }
 }
