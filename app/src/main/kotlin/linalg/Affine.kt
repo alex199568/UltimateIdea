@@ -150,6 +150,20 @@ class Affine(
         )
     }
 
+    override val transposed: Matrix
+        get() {
+            return affineTransposed
+        }
+
+    val affineTransposed by lazy {
+        AffineTransposed(
+            this[0, 0], this[1, 0], this[2, 0],  // First row: first column of original
+            this[0, 1], this[1, 1], this[2, 1],  // Second row: second column of original
+            this[0, 2], this[1, 2], this[2, 2],  // Third row: third column of original
+            this[0, 3], this[1, 3], this[2, 3]   // Fourth row: fourth column of original (translation)
+        )
+    }
+
     companion object {
 
         fun translate(x: Number, y: Number, z: Number): Affine {

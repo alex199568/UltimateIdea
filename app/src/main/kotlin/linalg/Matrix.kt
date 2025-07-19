@@ -108,7 +108,7 @@ open class Matrix(
         return result
     }
 
-    val transposed by lazy {
+    open val transposed by lazy {
         val result = Matrix(columns, rows)
         for (i in 0 until rows) {
             for (j in 0 until columns) {
