@@ -85,4 +85,91 @@ class ImageTest {
             image[2, 3] = newColor
         }
     }
+
+    @Test
+    fun testBufferedImageDimensions() {
+        val image = Image(3, 4)
+        val bufferedImage = image.buffered
+
+        assertEquals(3, bufferedImage.width, "Buffered image width does not match.")
+        assertEquals(4, bufferedImage.height, "Buffered image height does not match.")
+    }
+
+    @Test
+    fun testBufferedImagePixelColors() {
+        val image = Image(2, 2)
+        image[0, 0] = Color.red
+        image[1, 0] = Color.green
+        image[0, 1] = Color.blue
+        image[1, 1] = Color.black
+
+        val bufferedImage = image.buffered
+
+        assertEquals(Color.red.rgb, bufferedImage.getRGB(0, 0), "Top-left pixel does not match.")
+        assertEquals(Color.green.rgb, bufferedImage.getRGB(1, 0), "Top-right pixel does not match.")
+        assertEquals(Color.blue.rgb, bufferedImage.getRGB(0, 1), "Bottom-left pixel does not match.")
+        assertEquals(Color.black.rgb, bufferedImage.getRGB(1, 1), "Bottom-right pixel does not match.")
+    }
+
+    @Test
+    fun testBufferedImageUpdates() {
+        val image = Image(2, 2)
+        image[0, 0] = Color.red
+        image[1, 1] = Color.green
+
+        val bufferedImage = image.buffered
+
+        // Update one color and verify the change in the buffered image
+        image[1, 1] = Color.blue
+        assertEquals(
+            Color.blue.rgb,
+            image.buffered.getRGB(1, 1),
+            "Buffered image did not update after modifying image colors."
+        )
+    }
+
+    @Test
+    fun testSaveToFile() {
+        val image = Image(3, 2)
+        val path = "test_output.png"
+
+        // Save the image
+        image.save(path)
+
+        // Read the saved image
+        val savedImage = javax.imageio.ImageIO.read(java.io.File(path))
+
+        // Verify dimensions
+        assertEquals(3, savedImage.width, "Saved image width does not match.")
+        assertEquals(2, savedImage.height, "Saved image height does not match.")
+
+        // Clean up
+        java.io.File(path).delete()
+    }
+
+    @Test
+    fun testSaveFilePixelData() {
+        val image = Image(2, 2)
+        image[0, 0] = Color.red
+        image[1, 0] = Color.green
+        image[0, 1] = Color.blue
+        image[1, 1] = Color.black
+
+        val path = "test_pixels.png"
+
+        // Save the image
+        image.save(path)
+
+        // Read the saved image
+        val savedImage = javax.imageio.ImageIO.read(java.io.File(path))
+
+        // Verify pixel data
+        assertEquals(Color.red.rgb, savedImage.getRGB(0, 0), "Top-left saved pixel does not match.")
+        assertEquals(Color.green.rgb, savedImage.getRGB(1, 0), "Top-right saved pixel does not match.")
+        assertEquals(Color.blue.rgb, savedImage.getRGB(0, 1), "Bottom-left saved pixel does not match.")
+        assertEquals(Color.black.rgb, savedImage.getRGB(1, 1), "Bottom-right saved pixel does not match.")
+
+        // Clean up
+        java.io.File(path).delete()
+    }
 }

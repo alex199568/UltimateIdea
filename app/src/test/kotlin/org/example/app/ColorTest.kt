@@ -97,4 +97,28 @@ class ColorTest {
         // Then
         assertEquals(Color(1.0, 2.0, 3.0), color)
     }
+
+    @Test
+    fun `test RGB conversion for valid Color values`() {
+        // Given
+        val color = Color(0.5, 0.75, 1.0)
+
+        // When
+        val result = color.rgb
+
+        // Then
+        assertEquals(0xFF7FBFFF.toInt(), result)
+    }
+
+    @Test
+    fun `test RGB conversion clamps invalid Color values`() {
+        // Given
+        val color = Color(-0.1, 1.2, 0.5)
+
+        // When
+        val result = color.rgb
+
+        // Then
+        assertEquals(0xFF00FF7F.toInt(), result) // Red clamped to 0, Green clamped to 255, Blue is valid
+    }
 }

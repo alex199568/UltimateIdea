@@ -65,6 +65,14 @@ data class Color(
             b / factor
         )
     }
+    
+    val rgb: Int
+        get() {
+            val ri = (r.coerceIn(0.0, 1.0) * 255).toInt()
+            val gi = (g.coerceIn(0.0, 1.0) * 255).toInt()
+            val bi = (b.coerceIn(0.0, 1.0) * 255).toInt()
+            return (0xFF shl 24) or (ri shl 16) or (gi shl 8) or bi
+        }
 
     companion object {
         val white = Color(1, 1, 1)

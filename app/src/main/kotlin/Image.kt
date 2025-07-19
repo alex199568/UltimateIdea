@@ -1,5 +1,8 @@
 package org.example.app
 
+import java.awt.image.BufferedImage
+import javax.imageio.ImageIO
+
 class Image(
     val w: Int,
     val h: Int
@@ -19,5 +22,20 @@ class Image(
 
     operator fun set(x: Int, y: Int, c: Color) {
         colors[index(x, y)] = c
+    }
+    
+    val buffered: BufferedImage
+        get() {
+            val image = BufferedImage(w, h, BufferedImage.TYPE_INT_RGB)
+            for (y in 0 until h) {
+                for (x in 0 until w) {
+                    image.setRGB(x, y, colors[index(x, y)].rgb)
+                }
+            }
+            return image
+        }
+    
+    fun save(path: String) {
+        ImageIO.write(buffered, "png", java.io.File(path))
     }
 }
