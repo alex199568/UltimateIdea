@@ -112,52 +112,6 @@ open class Matrix(
         return Point(x / w, y / w, z / w)
     }
 
-    val det: Double
-        get() {
-            require(rows == columns) { "Matrix must be square to calculate determinant" }
-            if (rows == 1) return this[0, 0]
-            if (rows == 2) {
-                return this[0, 0] * this[1, 1] - this[0, 1] * this[1, 0]
-            }
-            var sum = 0.0
-            // Calculate using first row cofactor expansion
-            for (j in 0 until columns) {
-                sum += this[0, j] * cofactor(0, j)
-            }
-            return sum
-        }
-
-    fun submatrix(iExclude: Int, jExclude: Int): Matrix {
-        require(iExclude in 0 until rows) { "Row index $iExclude out of bounds [0, $rows)" }
-        require(jExclude in 0 until columns) { "Column index $jExclude out of bounds [0, $columns)" }
-
-        val result = Matrix(rows - 1, columns - 1)
-
-        var newRow = 0
-        for (i in 0 until rows) {
-            if (i == iExclude) continue
-
-            var newCol = 0
-            for (j in 0 until columns) {
-                if (j == jExclude) continue
-                result[newRow, newCol] = this[i, j]
-                newCol++
-            }
-            newRow++
-        }
-
-        return result
-    }
-
-    fun minor(i: Int, j: Int): Double {
-        return submatrix(i, j).det
-    }
-
-    fun cofactor(i: Int, j: Int): Double {
-        val sign = if ((i + j) % 2 == 0) 1 else -1
-        return sign * minor(i, j)
-    }
-
     val transposed by lazy {
         val result = Matrix(columns, rows)
         for (i in 0 until rows) {
