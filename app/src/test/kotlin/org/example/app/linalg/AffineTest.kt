@@ -124,4 +124,82 @@ class AffineTest {
         val transformed = rotation * point
         assertEquals(Point(0, 1, 0), transformed)
     }
+
+    @Test
+    fun `test scale with uniform scaling factors`() {
+        val expected = Affine(
+            2.0, 0.0, 0.0, 0.0,
+            0.0, 2.0, 0.0, 0.0,
+            0.0, 0.0, 2.0, 0.0
+        )
+
+        val result = Affine.scale(2, 2, 2)
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `test scale with different scaling factors`() {
+        val expected = Affine(
+            3.0, 0.0, 0.0, 0.0,
+            0.0, 4.0, 0.0, 0.0,
+            0.0, 0.0, 5.0, 0.0
+        )
+
+        val result = Affine.scale(3, 4, 5)
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `test scale with a zero scaling factor`() {
+        val expected = Affine(
+            0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 0.0
+        )
+
+        val result = Affine.scale(0, 0, 0)
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `test scale with negative scaling factors`() {
+        val expected = Affine(
+            -1.0, 0.0, 0.0, 0.0,
+            0.0, -2.0, 0.0, 0.0,
+            0.0, 0.0, -3.0, 0.0
+        )
+
+        val result = Affine.scale(-1, -2, -3)
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `test scale with mixed positive and negative scaling factors`() {
+        val expected = Affine(
+            2.0, 0.0, 0.0, 0.0,
+            0.0, -3.0, 0.0, 0.0,
+            0.0, 0.0, 4.0, 0.0
+        )
+
+        val result = Affine.scale(2, -3, 4)
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `test scale with fractional scaling factors`() {
+        val expected = Affine(
+            0.5, 0.0, 0.0, 0.0,
+            0.0, 0.25, 0.0, 0.0,
+            0.0, 0.0, 0.75, 0.0
+        )
+
+        val result = Affine.scale(0.5, 0.25, 0.75)
+
+        assertEquals(expected, result)
+    }
 }
