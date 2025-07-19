@@ -2,7 +2,7 @@ package org.example.app.linalg
 
 import org.example.app.eq
 
-class Matrix(
+open class Matrix(
     val rows: Int,
     val columns: Int,
     vararg elements: Number = emptyArray<Number>()
@@ -173,20 +173,11 @@ class Matrix(
         val d = det
         require(d != 0.0) { "Matrix is not invertible (determinant is zero)" }
 
-        // Create adjoint matrix using cofactors
-        val adjoint = Matrix(rows, columns).apply {
-            for (i in 0 until rows) {
-                for (j in 0 until columns) {
-                    this[i, j] = this@Matrix.cofactor(j, i)  // Note: j,i for transpose
-                }
-            }
-        }
-
-        // Divide adjoint by determinant
         Matrix(rows, columns).apply {
             for (i in 0 until rows) {
                 for (j in 0 until columns) {
-                    this[i, j] = adjoint[i, j] / d
+                    // Note: j,i for transpose
+                    this[i, j] = this@Matrix.cofactor(j, i) / d
                 }
             }
         }
