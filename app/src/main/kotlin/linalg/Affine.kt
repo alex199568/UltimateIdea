@@ -226,5 +226,11 @@ class Affine(
                 zx, zy, 1, 0
             )
         }
+
+        val identity = Affine(
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0
+        )
     }
 }
