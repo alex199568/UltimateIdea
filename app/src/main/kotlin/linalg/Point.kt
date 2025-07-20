@@ -48,4 +48,9 @@ data class Point(
             z - other.z
         )
     }
+
+    companion object {
+
+        val zero = Point(0, 0, 0)
+    }
 }

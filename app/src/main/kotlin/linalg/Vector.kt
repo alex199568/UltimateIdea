@@ -80,4 +80,12 @@ data class Vector(
             x * other.y - y * other.x
         )
     }
+
+    companion object {
+
+        val zero = Vector(0, 0, 0)
+        val xUnit = Vector(1, 0, 0)
+        val yUnit = Vector(0, 1, 0)
+        val zUnit = Vector(0, 0, 1)
+    }
 }
