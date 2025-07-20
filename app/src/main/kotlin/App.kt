@@ -1,8 +1,8 @@
 package org.example.app
 
-fun main() {
-    println("Ultimate Idea")
+import org.example.app.linalg.transform
 
+private fun renderSimpleImage() {
     val image = Image(128, 96)
 
     for (y in 20 until 32) {
@@ -12,4 +12,18 @@ fun main() {
     }
 
     image.save("renders/image.png")
+}
+
+fun main() {
+    println("Ultimate Idea")
+
+    val tr = transform {
+        moveLeft(2)
+        moveUp(3)
+        rotateXd(45)
+        growX(2)
+        growY(3)
+        shrinkZ(1.5)
+    }
+    println(tr)
 }

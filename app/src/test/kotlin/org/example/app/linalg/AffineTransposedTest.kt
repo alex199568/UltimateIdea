@@ -75,4 +75,45 @@ class AffineTransposedTest {
         assertEquals(1.0/3.0, result.z, Epsilon)
     }
 
+    @Test
+    fun testAffineTransposedVectorTransformation() {
+        val matrix = AffineTransposed(
+            1, 0, 0,
+            0, 1, 0,
+            0, 0, 1,
+            0, 0, 0
+        )
+        val vector = Vector(1.0, 2.0, 3.0)
+        val result = matrix * vector
+
+        // Expected calculation:
+        // x = 1*1 + 0*2 + 0*3 = 1
+        // y = 0*1 + 1*2 + 0*3 = 2
+        // z = 0*1 + 0*2 + 1*3 = 3
+
+        assertEquals(1.0, result.x, Epsilon)
+        assertEquals(2.0, result.y, Epsilon)
+        assertEquals(3.0, result.z, Epsilon)
+    }
+
+    @Test
+    fun testAffineTransposedVectorTransformationWithScaling() {
+        val matrix = AffineTransposed(
+            2, 0, 0,
+            0, 3, 0,
+            0, 0, 4,
+            0, 0, 0
+        )
+        val vector = Vector(1.0, 1.0, 1.0)
+        val result = matrix * vector
+
+        // Expected calculation:
+        // x = 2*1 + 0*1 + 0*1 = 2
+        // y = 0*1 + 3*1 + 0*1 = 3
+        // z = 0*1 + 0*1 + 4*1 = 4
+
+        assertEquals(2.0, result.x, Epsilon)
+        assertEquals(3.0, result.y, Epsilon)
+        assertEquals(4.0, result.z, Epsilon)
+    }
 }
