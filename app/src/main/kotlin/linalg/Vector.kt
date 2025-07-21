@@ -1,6 +1,7 @@
 package org.example.app.linalg
 
 import org.example.app.eq
+import kotlin.math.sqrt
 
 data class Vector(
     val x: Double,
@@ -79,6 +80,18 @@ data class Vector(
             z * other.x - x * other.z,
             x * other.y - y * other.x
         )
+    }
+
+    val squaredLength by lazy {
+        this dot this
+    }
+
+    val length by lazy {
+        sqrt(squaredLength)
+    }
+
+    val unit by lazy {
+        this / length
     }
 
     companion object {
