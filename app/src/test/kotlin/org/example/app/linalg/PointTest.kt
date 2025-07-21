@@ -83,4 +83,27 @@ class PointTest {
         val point2 = Point(4.5, 5.5, 6.5)
         assertNotEquals(point1.hashCode(), point2.hashCode(), "Expected different Points to have different hashCodes")
     }
+
+    @Test
+    fun `test vector property returns correct Vector`() {
+        val point = Point(1.5, 2.5, 3.5)
+        val vector = point.vector
+        assertEquals(1.5, vector.x, "Expected x to match the Point's x coordinate")
+        assertEquals(2.5, vector.y, "Expected y to match the Point's y coordinate")
+        assertEquals(3.5, vector.z, "Expected z to match the Point's z coordinate")
+    }
+
+    @Test
+    fun `test vector property of Point zero returns Vector zero`() {
+        val vector = Point.zero.vector
+        assertEquals(Vector.zero, vector, "Expected Point.zero's vector to equal Vector.zero")
+    }
+
+    @Test
+    fun `test vector property consistency for the same Point instance`() {
+        val point = Point(4.0, 5.0, 6.0)
+        val vector1 = point.vector
+        val vector2 = point.vector
+        assertEquals(vector1, vector2, "Expected vector property to be consistent for the same Point instance")
+    }
 }

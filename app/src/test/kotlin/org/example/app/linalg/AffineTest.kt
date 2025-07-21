@@ -1,8 +1,12 @@
 package org.example.app.linalg
 
+import org.example.app.Epsilon
+import org.example.app.Ray
 import org.example.app.linalg.Affine.Companion.rotateX
 import org.example.app.linalg.Affine.Companion.rotateY
 import org.example.app.linalg.Affine.Companion.rotateZ
+import kotlin.math.cos
+import kotlin.math.sin
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -659,4 +663,202 @@ class AffineTest {
         assertEquals(9.0, result.y)
         assertEquals(9.0, result.z)
     }
+
+    @Test
+    fun testRayTransformationWithIdentityMatrix() {
+        val identityMatrix = Affine.identity
+        val ray = Ray(
+            origin = Point(1, 2, 3),
+            direction = Vector(0, 1, 0)
+        )
+
+        val transformedRay = identityMatrix * ray
+
+        assertEquals(ray.origin, transformedRay.origin)
+        assertEquals(ray.direction, transformedRay.direction)
+    }
+
+    @Test
+    fun testRayTransformationWithTranslation() {
+        val translationMatrix = Affine.translate(5, -3, 2)
+        val ray = Ray(
+            origin = Point(2, 3, 4),
+            direction = Vector(0, 1, 0)
+        )
+
+        val transformedRay = translationMatrix * ray
+
+        // Origin should be translated
+        assertEquals(Point(7, 0, 6), transformedRay.origin)
+        // Direction should remain unchanged (translation doesn't affect direction)
+        assertEquals(Vector(0, 1, 0), transformedRay.direction)
+    }
+
+    @Test
+    fun testRayTransformationWithScaling() {
+        val scalingMatrix = Affine.scale(2, 0.5, -1)
+        val ray = Ray(
+            origin = Point(2, -4, 1),
+            direction = Vector(1, 2, 4)
+        )
+
+        val transformedRay = scalingMatrix * ray
+
+        // Both origin and direction should be scaled
+        assertEquals(Point(4, -2, -1), transformedRay.origin)
+        assertEquals(Vector(2, 1, -4), transformedRay.direction)
+    }
+
+    @Test
+    fun testRayTransformationWithRotationAroundX() {
+        val rotationMatrix = Affine.rotateX(Math.PI / 2) // 90 degrees
+        val ray = Ray(
+            origin = Point(1, 1, 0),
+            direction = Vector(0, 1, 0)
+        )
+
+        val transformedRay = rotationMatrix * ray
+
+        // After 90-degree rotation around X-axis: (x, y, z) -> (x, -z, y)
+        val expectedRay = Ray(
+            Point(1, 0, 1),
+            Vector(0, 0, 1)
+        )
+        assertEquals(expectedRay, transformedRay)
+    }
+
+    @Test
+    fun testRayTransformationWithRotationAroundY() {
+        val rotationMatrix = Affine.rotateY(Math.PI / 2) // 90 degrees
+        val ray = Ray(
+            origin = Point(1, 0, 1),
+            direction = Vector(1, 0, 0)
+        )
+
+        val transformedRay = rotationMatrix * ray
+
+        // After 90-degree rotation around Y-axis: (x, y, z) -> (z, y, -x)
+        val expectedRay = Ray(
+            Point(1, 0, -1),
+            Vector(0, 0, -1)
+        )
+        assertEquals(expectedRay, transformedRay)
+    }
+
+    @Test
+    fun testRayTransformationWithRotationAroundZ() {
+        val rotationMatrix = Affine.rotateZ(Math.PI / 2) // 90 degrees
+        val ray = Ray(
+            origin = Point(1, 1, 0),
+            direction = Vector(1, 0, 0)
+        )
+
+        val transformedRay = rotationMatrix * ray
+
+        // After 90-degree rotation around Z-axis: (x, y, z) -> (-y, x, z)
+        val expectedRay = Ray(
+            Point(-1, 1, 0),
+            Vector(0, 1, 0)
+        )
+
+        assertEquals(expectedRay, transformedRay)
+    }
+
+    @Test
+    fun testRayTransformationWithShearing() {
+        val shearingMatrix = Affine.shearing(
+            xy = 1, xz = 0,
+            yx = 0, yz = 0,
+            zx = 0, zy = 0
+        )
+        val ray = Ray(
+            origin = Point(2, 3, 4),
+            direction = Vector(0, 1, 0)
+        )
+
+        val transformedRay = shearingMatrix * ray
+
+        // x is moved in proportion to y
+        assertEquals(Point(5, 3, 4), transformedRay.origin) // x = 2 + 1*3 = 5
+        assertEquals(Vector(1, 1, 0), transformedRay.direction) // x direction = 0 + 1*1 = 1
+    }
+
+    @Test
+    fun testRayTransformationWithCompositeTransformation() {
+        // Create a composite transformation: scale, then rotate, then translate
+        val scaling = Affine.scale(2, 2, 2)
+        val rotation = Affine.rotateZ(Math.PI / 4) // 45 degrees
+        val translation = Affine.translate(1, 1, 1)
+
+        val compositeTransform = translation * rotation * scaling
+
+        val ray = Ray(
+            origin = Point(1, 0, 0),
+            direction = Vector(1, 0, 0)
+        )
+
+        val transformedRay = compositeTransform * ray
+
+        // This is a complex transformation, but we can verify the transformation was applied
+        // The exact values depend on the order of operations: scale -> rotate -> translate
+
+        // After scaling: origin (2, 0, 0), direction (2, 0, 0)
+        // After 45-degree rotation around Z: origin (~1.414, ~1.414, 0), direction (~1.414, ~1.414, 0)
+        // After translation: origin (~2.414, ~2.414, 1), direction (~1.414, ~1.414, 0)
+
+        val expectedOriginX = 1 + 2 * cos(Math.PI / 4)
+        val expectedOriginY = 1 + 2 * sin(Math.PI / 4)
+        val expectedDirectionX = 2 * cos(Math.PI / 4)
+        val expectedDirectionY = 2 * sin(Math.PI / 4)
+
+        val expectedRay = Ray(
+            Point(expectedOriginX, expectedOriginY, 1.0),
+            Vector(expectedDirectionX, expectedDirectionY, 0.0)
+        )
+
+        assertEquals(expectedRay, transformedRay)
+    }
+
+    @Test
+    fun testRayTransformationWithZeroDirection() {
+        val scalingMatrix = Affine.scale(2, 3, 4)
+        val ray = Ray(
+            origin = Point(1, 1, 1),
+            direction = Vector(0, 0, 0)
+        )
+
+        val transformedRay = scalingMatrix * ray
+
+        assertEquals(Point(2, 3, 4), transformedRay.origin)
+        assertEquals(Vector(0, 0, 0), transformedRay.direction)
+    }
+
+    @Test
+    fun testRayTransformationWithZeroOrigin() {
+        val translationMatrix = Affine.translate(1, 2, 3)
+        val ray = Ray(
+            origin = Point(0, 0, 0),
+            direction = Vector(1, 1, 1)
+        )
+
+        val transformedRay = translationMatrix * ray
+
+        assertEquals(Point(1, 2, 3), transformedRay.origin)
+        assertEquals(Vector(1, 1, 1), transformedRay.direction) // direction unaffected by translation
+    }
+
+    @Test
+    fun testTranslationInverse() {
+        val translation = Affine.translate(1, 0, 0)
+        val inverse = translation.inverse
+        val shouldBeIdentity = translation * inverse
+
+        // Should be close to identity matrix
+        assertEquals(1.0, shouldBeIdentity[0, 0], Epsilon)
+        assertEquals(0.0, shouldBeIdentity[0, 1], Epsilon)
+        assertEquals(0.0, shouldBeIdentity[0, 2], Epsilon)
+        assertEquals(0.0, shouldBeIdentity[0, 3], Epsilon)
+        // ... check other elements
+    }
+
 }

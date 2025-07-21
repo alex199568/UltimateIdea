@@ -1,6 +1,7 @@
 package org.example.app.linalg
 
 import org.example.app.Epsilon
+import org.example.app.Ray
 import org.junit.jupiter.api.Assertions.assertEquals
 import kotlin.test.Test
 
@@ -115,5 +116,71 @@ class AffineTransposedTest {
         assertEquals(2.0, result.x, Epsilon)
         assertEquals(3.0, result.y, Epsilon)
         assertEquals(4.0, result.z, Epsilon)
+    }
+
+    @Test
+    fun testAffineTransposedRayTransformationWithTranslationAndScaling() {
+        val matrix = AffineTransposed(
+            2, 0, 0,
+            0, 3, 0,
+            0, 0, 4,
+            1, 2, 3
+        )
+        val ray = Ray(
+            origin = Point(1.0, 1.0, 1.0),
+            direction = Vector(1.0, 0.0, 0.0)
+        )
+        val transformedRay = matrix * ray
+
+        // Expected calculations for origin:
+        // x = 2*1 + 0*1 + 0*1 = 2
+        // y = 0*1 + 3*1 + 0*1 = 3
+        // z = 0*1 + 0*1 + 4*1 = 4
+        // w = 1*1 + 2*1 + 3*1 + 1 = 7
+        // Resulting origin: (2/7, 3/7, 4/7)
+
+        // Expected calculations for direction:
+        // x = 2*1 + 0*0 + 0*0 = 2
+        // y = 0*1 + 3*0 + 0*0 = 0
+        // z = 0*1 + 0*0 + 4*0 = 0
+
+        val expected = Ray(
+            Point(2.0 / 7.0, 3.0 / 7.0, 4.0 / 7.0),
+            Vector(2.0, 0.0, 0.0)
+        )
+
+        assertEquals(expected, transformedRay)
+    }
+
+    @Test
+    fun testAffineTransposedRayTransformationWithRotation() {
+        val rotationMatrix = AffineTransposed(
+            0, -1, 0,
+            1, 0, 0,
+            0, 0, 1,
+            0, 0, 0
+        )
+        val ray = Ray(
+            origin = Point(1.0, 0.0, 0.0),
+            direction = Vector(1.0, 0.0, 0.0)
+        )
+        val transformedRay = rotationMatrix * ray
+
+        // Expected calculations for origin:
+        // x = 0*1 + (-1)*0 + 0*0 = 0
+        // y = 1*1 + 0*0 + 0*0 = 1
+        // z = 0*1 + 0*0 + 1*0 = 0
+
+        // Expected calculations for direction:
+        // x = 0*1 + (-1)*0 + 0*0 = 0
+        // y = 1*1 + 0*0 + 0*0 = 1
+        // z = 0*1 + 0*0 + 1*0 = 0
+
+        val expected = Ray(
+            Point(0, 1, 0),
+            Vector(0, 1, 0)
+        )
+
+        assertEquals(expected, transformedRay)
     }
 }

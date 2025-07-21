@@ -1,5 +1,6 @@
 package org.example.app.linalg
 
+import org.example.app.Ray
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -118,6 +119,13 @@ class Affine(
                 }
             }
         }
+    }
+
+    operator fun times(ray: Ray): Ray {
+        return Ray(
+            origin = this * (ray.origin),
+            direction = this * (ray.direction)
+        )
     }
 
     val inverse by lazy {

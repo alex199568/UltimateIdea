@@ -1,5 +1,7 @@
 package org.example.app.linalg
 
+import org.example.app.Ray
+
 class AffineTransposed(
     vararg elements: Number = emptyArray<Number>()
 ) : Matrix(4, 3, *elements) {
@@ -23,6 +25,13 @@ class AffineTransposed(
             this[0, 0] * v.x + this[0, 1] * v.y + this[0, 2] * v.z,
             this[1, 0] * v.x + this[1, 1] * v.y + this[1, 2] * v.z,
             this[2, 0] * v.x + this[2, 1] * v.y + this[2, 2] * v.z
+        )
+    }
+
+    operator fun times(ray: Ray): Ray {
+        return Ray(
+            origin = this * (ray.origin),
+            direction = this * (ray.direction)
         )
     }
 }

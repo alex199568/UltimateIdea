@@ -49,6 +49,10 @@ data class Point(
         )
     }
 
+    val vector by lazy {
+        Vector(x, y, z)
+    }
+
     companion object {
 
         val zero = Point(0, 0, 0)
